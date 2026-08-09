@@ -102,7 +102,26 @@ if(!jugando)return;
 const canvas=document.createElement("canvas"); const ctx=canvas.getContext("2d");
 canvas.width=100; canvas.height=75;
 ctx.drawImage(camara,0,0,100,75);
-const datos=ctx.getImageData(0,0,100,75).data;
+  let rojos=0;
+
+for(let y=0;y<75;y++){
+
+  for(let x=0;x<100;x++){
+
+    if(x<25 || x>75){
+
+      const i=(y*100+x)*4;
+
+      const datos=ctx.getImageData(0,0,100,75).data;
+const r=datos[i];
+const g=datos[i+1];
+const b=datos[i+2];
+      if(r>100 && r>g*1.05 && r>b*1.05){
+        rojos++;
+      }
+    }
+  }
+}
 let rojos=0;
 for(let i=0;i<datos.length;i+=4){
 const r=datos[i];
