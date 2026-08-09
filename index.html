@@ -122,6 +122,11 @@ racha++;
 
 scoreEl.textContent=score;
 rachaEl.textContent=racha;
+  setTimeout(()=>{
+  detectarCapote();
+},1000);
+
+return;
 }else{
 mensaje.textContent="🔎 Buscando capote... "+porcentaje+"%";
 }
