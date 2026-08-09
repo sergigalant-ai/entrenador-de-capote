@@ -98,7 +98,7 @@ try{ const stream=await navigator.mediaDevices.getUserMedia({ video:true });
 camara.srcObject=stream; jugando=true; boton.style.display="none"; mensaje.textContent="🟢 ¡FUNCIONANDO! Busca tu capote rojo"; detectarCapote();
 }catch(error){ mensaje.textContent="❌ No se pudo activar la cámara"; } };
 function detectarCapote(){
-if(!jugando)return;
+If(!jugando)return;
 const canvas=document.createElement("canvas"); const ctx=canvas.getContext("2d");
 canvas.width=100; canvas.height=75;
 ctx.drawImage(camara,0,0,100,75);
@@ -132,7 +132,7 @@ if(r>100 && r>g*1.05 && r>b*1.05){
   rojos++;
 }
 }
-const porcentaje=Math.round(rojos/(100*75)*100);
+const porcentaje=Math.round(rojos/(100*75)*100); 
 if(porcentaje>=12){
 mensaje.textContent="🔴 ¡CAPOTE DETECTADO! "+porcentaje+"%";
 
