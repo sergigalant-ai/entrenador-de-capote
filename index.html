@@ -97,8 +97,9 @@ boton.onclick=async function(){
 try{ const stream=await navigator.mediaDevices.getUserMedia({ video:true });
 camara.srcObject=stream; jugando=true; boton.style.display="none"; mensaje.textContent="🟢 ¡FUNCIONANDO! Busca tu capote rojo"; detectarCapote();
 }catch(error){ mensaje.textContent="❌ No se pudo activar la cámara"; } };
+ detectarCapote();
 function detectarCapote(){
-If(!jugando)return;
+if(!jugando)return;
 const canvas=document.createElement("canvas"); const ctx=canvas.getContext("2d");
 canvas.width=100; canvas.height=75;
 ctx.drawImage(camara,0,0,100,75);
