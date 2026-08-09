@@ -1,70 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrenador de Capote</title>
 <style>
-body{margin:0;background:#111;color:white;font-family:Arial;text-align:center}
-#game{padding:30px}
-button{padding:18px 35px;font-size:22px;border:0;border-radius:30px;background:#d22;color:white}
-video{width:100%;max-width:500px;margin-top:20px}
+body{
+  margin:0;
+  background:#111;
+  color:white;
+  font-family:Arial;
+  text-align:center;
+}
+
+#game{
+  width:100%;
+  min-height:100vh;
+  position:relative;
+  overflow:hidden;
+}
+  
+
+h1{
+  margin:15px 0;
+}
+  #info{
+  font-size:20px;
+  font-weight:bold;
+}
+
+#mensaje{
+  font-size:22px;
+  margin:15px;
+}
+
+button{
+  padding:15px 30px;
+  font-size:22px;
+  border:0;
+  border-radius:30px;
+  background:red;
+  color:white;
+  font-weight:bold;
+}
+  #camara{
+  width:90%;
+  max-width:500px;
+  margin-top:20px;
+}
+
+#toro{
+  position:absolute;
+  font-size:70px;
+  left:10%;
+  top:60%;
+}
 </style>
 </head>
-
 <body>
+
 <div id="game">
+
 <h1>🐂 Entrenador de Capote</h1>
-<p id="mensaje">Pulsa EMPEZAR</p>
+
+<div id="info">
+Puntos: <span id="score">0</span>
+&nbsp;&nbsp;
+Racha: <span id="racha">0</span>
+</div>
+
+<div id="mensaje">
+Pulsa EMPEZAR y usa tu capote rojo
+</div>
 <button id="empezar">EMPEZAR</button>
+
+<br>
+
 <video id="camara" autoplay playsinline></video>
+
+<div id="toro">🐂</div>
+
 </div>
 
 <script>
-const boton=document.getElementById("empezar");
+  const boton=document.getElementById("empezar");
 const mensaje=document.getElementById("mensaje");
 const camara=document.getElementById("camara");
-const canvas=document.createElement("canvas");
-const ctx=canvas.getContext("2d");
-
-function detectarRojo(){
-  if(camara.videoWidth===0)return;
-
-  canvas.width=80;
-  canvas.height=60;
-  ctx.drawImage(camara,0,0,80,60);
-
-  const datos=ctx.getImageData(0,0,80,60).data;
-  let rojos=0;
-
-  for(let i=0;i<datos.length;i+=4){
-    const r=datos[i];
-    const g=datos[i+1];
-    const b=datos[i+2];
-
-    if(r>100 && r>g*1.15 && r>b*1.15){
-      rojos++;
-    }
-  }
-
-  if(rojos>20){
-    mensaje.textContent="Rojo detectado: "+rojos;
-    mensaje.textContent="🟥 ¡CAPOTE DETECTADO!";
-  }else{
-    mensaje.textContent="🔎 Buscando el capote...";
-  }
-
-  requestAnimationFrame(detectarRojo);
-  }
-boton.onclick=async function(){
-  try{
-    const stream=await navigator.mediaDevices.getUserMedia({
-      video:true,
-      audio:false
-    });
-
-    camara.srcObject=stream;
-    detectarRojo();
-    mensaje.textContent="📷 ¡Cámara activada!";
-    boton.textContent="¡ESTÁ FUNCIONANDO!";
-  }catch(error){
-    mensaje.textContent="❌ No se pudo activar la cámara";
-  }
-};
-</script>
-</body>
-</html>
+const scoreEl=document.getElementById("score");
+const rachaEl=document.getElementById("racha");
+const toro=document.getElementById("toro");
+let score=0;
+let racha=0;
+let jugando=false;
