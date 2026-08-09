@@ -130,7 +130,9 @@ return;
 }else{
 mensaje.textContent="🔎 Buscando capote... "+porcentaje+"%";
 }
-requestAnimationFrame(detectarCapote); }  
+setTimeout(()=>{
+  detectarCapote();
+},200);  
 </script>
 </body>
 </html>
