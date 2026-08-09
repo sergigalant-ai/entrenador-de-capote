@@ -92,3 +92,40 @@ const toro=document.getElementById("toro");
 let score=0;
 let racha=0;
 let jugando=false;
+boton.onclick=async function(){
+  if(jugando)return;
+try{ const stream=await navigator.mediaDevices.getUserMedia({ video:true });
+camara.srcObject=stream; jugando=true; boton.style.display="none"; mensaje.textContent="🟢 ¡FUNCIONANDO! Busca tu capote rojo"; detectarCapote();
+}catch(error){ mensaje.textContent="❌ No se pudo activar la cámara"; } };
+function detectarCapote(){
+if(!jugando)return;
+const canvas=document.createElement("canvas"); const ctx=canvas.getContext("2d");
+canvas.width=100; canvas.height=75;
+ctx.drawImage(camara,0,0,100,75);
+const datos=ctx.getImageData(0,0,100,75).data;
+let rojos=0;
+for(let i=0;i<datos.length;i+=4){
+const r=datos[i];
+const g=datos[i+1];
+const b=datos[i+2];
+
+if(r>100 && r>g*1.05 && r>b*1.05){
+  rojos++;
+}
+}
+const porcentaje=Math.round(rojos/(100*75)*100);
+if(porcentaje>=5){
+mensaje.textContent="🔴 ¡CAPOTE DETECTADO! "+porcentaje+"%";
+
+score++;
+racha++;
+
+scoreEl.textContent=score;
+rachaEl.textContent=racha;
+}else{
+mensaje.textContent="🔎 Buscando capote... "+porcentaje+"%";
+}
+requestAnimationFrame(detectarCapote); }  
+</script>
+</body>
+</html>
