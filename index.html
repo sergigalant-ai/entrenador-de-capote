@@ -18,7 +18,37 @@ video{width:100%;max-width:500px;margin-top:20px}
 const boton=document.getElementById("empezar");
 const mensaje=document.getElementById("mensaje");
 const camara=document.getElementById("camara");
+const canvas=document.createElement("canvas");
+const ctx=canvas.getContext("2d");
 
+function detectarRojo(){
+  if(camara.videoWidth===0)return;
+
+  canvas.width=80;
+  canvas.height=60;
+  ctx.drawImage(camara,0,0,80,60);
+
+  const datos=ctx.getImageData(0,0,80,60).data;
+  let rojos=0;
+
+  for(let i=0;i<datos.length;i+=4){
+    const r=datos[i];
+    const g=datos[i+1];
+    const b=datos[i+2];
+
+    if(r>130 && r>g*1.4 && r>b*1.4){
+      rojos++;
+    }
+  }
+
+  if(rojos>100){
+    mensaje.textContent="🟥 ¡CAPOTE DETECTADO!";
+  }else{
+    mensaje.textContent="🔎 Buscando el capote...";
+  }
+
+  requestAnimationFrame(detectarRojo);
+  }
 boton.onclick=async function(){
   try{
     const stream=await navigator.mediaDevices.getUserMedia({
@@ -27,6 +57,7 @@ boton.onclick=async function(){
     });
 
     camara.srcObject=stream;
+    detectarRojo();
     mensaje.textContent="📷 ¡Cámara activada!";
     boton.textContent="¡ESTÁ FUNCIONANDO!";
   }catch(error){
